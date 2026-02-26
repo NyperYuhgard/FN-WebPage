@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>FanaxMedia - News Feed</title>
     <style>
-        /* Variables de color para fácil personalización */
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
-            --accent-color: #ffa500; /* Naranja temático */
+            --accent-color: #ffa500;
             --text-main: #ffffff;
             --text-dim: #a0a0a0;
         }
@@ -46,7 +50,6 @@
             font-size: 0.9rem;
         }
 
-        /* Estilo de las tarjetas de noticias */
         .noticia { 
             background: var(--card-bg); 
             padding: 20px; 
@@ -54,13 +57,12 @@
             border-left: 5px solid var(--accent-color); 
             margin-bottom: 20px; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease;
             animation: fadeIn 0.5s ease forwards;
         }
 
         .noticia:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 165, 0, 0.1);
         }
 
         .fecha { 
@@ -83,13 +85,11 @@
             word-wrap: break-word;
         }
 
-        /* Animación de entrada */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Loader */
         .loader {
             text-align: center;
             color: var(--text-dim);
@@ -113,14 +113,24 @@
     <script>
         async function cargarNoticias() {
             try {               
-                const urlRaw = "https://raw.githubusercontent.com/NyperYuhgard/FN-WebPage/main/noticias.json";
-                // cache-buster (?v=) para saltar el minuto de caché de GitHub
-                const respuesta = await fetch(urlRaw + '?v=' + Date.now());
-                const datos = await respuesta.json();
+                const urlRaw = "https://raw.githubusercontent.com/NyperYuhgard/FN-ExternalData/refs/heads/main/noticias.json";
                 
+                // Capa 2 y 3: Fetch con Headers anticache y Cache-Buster dinámico
+                const respuesta = await fetch(`${urlRaw}?v=${new Date().getTime()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+
+                if (!respuesta.ok) throw new Error('Error en la red');
+
+                const datos = await respuesta.json();
                 const feed = document.getElementById('feed');
                 
-                if (datos.length === 0) {
+                if (!datos || datos.length === 0) {
                     feed.innerHTML = '<div class="loader">No hay noticias publicadas todavía.</div>';
                     return;
                 }
@@ -138,14 +148,15 @@
                 });
             } catch (error) {
                 console.error("Error al cargar:", error);
-                document.getElementById('feed').innerHTML = '<div class="loader">⚠️ Error al cargar el feed.</div>';
+                // No borramos lo que ya hay si falla una recarga automática para no dejar la pantalla vacía
+                if (document.getElementById('feed').children.length <= 1) {
+                    document.getElementById('feed').innerHTML = '<div class="loader">⚠️ Error al conectar con el servidor.</div>';
+                }
             }
         }
 
-        // Carga inicial
         cargarNoticias();
-
-        // Recarga automática cada 45 segundos para ver noticias nuevas sin refrescar
+        // Recarga automática cada 45 segundos
         setInterval(cargarNoticias, 45000);
     </script>
 </body>
