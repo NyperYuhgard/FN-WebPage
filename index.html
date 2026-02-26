@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tech Demo - Noticias Furry</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #eee; }
+        .container { max-width: 600px; margin: 50px auto; }
+        .noticia { background: #2d2d2d; padding: 15px; border-radius: 8px; border-left: 4px solid #7289da; margin-bottom: 10px; }
+        .fecha { font-size: 0.8em; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Últimas Noticias del Canal</h1>
+        <div id="feed">Cargando noticias...</div>
+    </div>
+
+    <script>
+        async function cargarNoticias() {
+            try {
+                // Cambia 'noticias.json' por la URL de tu archivo en GitHub
+                const respuesta = await fetch('noticias.json');
+                const datos = await respuesta.json();
+                const feed = document.getElementById('feed');
+                feed.innerHTML = '';
+                
+                datos.forEach(item => {
+                    feed.innerHTML += `
+                        <div class="noticia">
+                            <div class="fecha">${item.fecha}</div>
+                            <p>${item.contenido}</p>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error al cargar:", error);
+            }
+        }
+        cargarNoticias();
+    </script>
+</body>
+</html>
