@@ -118,20 +118,16 @@
     <script>
         async function cargarNoticias() {
             try {               
-                const urlRaw = "https://raw.githubusercontent.com/NyperYuhgard/FN-ExternalData/refs/heads/main/noticias.json";
+                // Usamos la URL simplificada
+                const urlRaw = "https://raw.githubusercontent.com/NyperYuhgard/FN-ExternalData/main/noticias.json";
                 
-                // Capa 2 y 3: Fetch con Headers anticache y Cache-Buster dinámico
-                const respuesta = await fetch(`${urlRaw}?v=${new Date().getTime()}`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                });
-
-                if (!respuesta.ok) throw new Error('Error en la red');
-
+                // El parámetro ?v= es suficiente para saltar la caché en el 99% de los casos
+                const respuesta = await fetch(`${urlRaw}?v=${new Date().getTime()}`);
+        
+                if (!respuesta.ok) {
+                    throw new Error(`Error ${respuesta.status}: No se pudo encontrar el archivo JSON`);
+                }
+        
                 const datos = await respuesta.json();
                 const feed = document.getElementById('feed');
                 
@@ -139,7 +135,7 @@
                     feed.innerHTML = '<div class="loader">No hay noticias publicadas todavía.</div>';
                     return;
                 }
-
+        
                 feed.innerHTML = '';
                 
                 datos.forEach(item => {
@@ -153,9 +149,10 @@
                 });
             } catch (error) {
                 console.error("Error al cargar:", error);
-                // No borramos lo que ya hay si falla una recarga automática para no dejar la pantalla vacía
-                if (document.getElementById('feed').children.length <= 1) {
-                    document.getElementById('feed').innerHTML = '<div class="loader">⚠️ Error al conectar con el servidor.</div>';
+                const feed = document.getElementById('feed');
+                // Esto te dirá el error real en la pantalla
+                if (feed.children.length <= 1) {
+                    feed.innerHTML = `<div class="loader">⚠️ Error: ${error.message}</div>`;
                 }
             }
         }
