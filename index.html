@@ -20,7 +20,7 @@
         async function cargarNoticias() {
             try {
                 // Cambia 'noticias.json' por la URL de tu archivo en GitHub
-                const respuesta = await fetch('noticias.json');
+                const respuesta = await fetch('noticias.json?v=' + Date.now());
                 const datos = await respuesta.json();
                 const feed = document.getElementById('feed');
                 feed.innerHTML = '';
