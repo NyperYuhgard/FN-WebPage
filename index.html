@@ -2,42 +2,151 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tech Demo - Noticias Furry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FanaxMedia - News Feed</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #eee; }
-        .container { max-width: 600px; margin: 50px auto; }
-        .noticia { background: #2d2d2d; padding: 15px; border-radius: 8px; border-left: 4px solid #7289da; margin-bottom: 10px; }
-        .fecha { font-size: 0.8em; color: #888; }
+        /* Variables de color para fácil personalización */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #ffa500; /* Naranja temático */
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container { 
+            max-width: 650px; 
+            margin: 40px auto; 
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { 
+            color: var(--accent-color); 
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Estilo de las tarjetas de noticias */
+        .noticia { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 16px; 
+            border-left: 5px solid var(--accent-color); 
+            margin-bottom: 20px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .noticia:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 165, 0, 0.1);
+        }
+
+        .fecha { 
+            font-size: 0.75rem; 
+            font-weight: bold;
+            color: var(--accent-color); 
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .fecha::before {
+            content: "📅";
+            margin-right: 6px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1.05rem;
+            word-wrap: break-word;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loader */
+        .loader {
+            text-align: center;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Últimas Noticias del Canal</h1>
-        <div id="feed">Cargando noticias...</div>
+        <header>
+            <h1>FanaxMedia News</h1>
+            <div class="subtitle">Actualizaciones automáticas desde Telegram</div>
+        </header>
+
+        <div id="feed">
+            <div class="loader">Conectando con el canal...</div>
+        </div>
     </div>
 
     <script>
         async function cargarNoticias() {
             try {               
                 const urlRaw = "https://raw.githubusercontent.com/NyperYuhgard/FN-WebPage/main/noticias.json";
+                // cache-buster (?v=) para saltar el minuto de caché de GitHub
                 const respuesta = await fetch(urlRaw + '?v=' + Date.now());
                 const datos = await respuesta.json();
+                
                 const feed = document.getElementById('feed');
+                
+                if (datos.length === 0) {
+                    feed.innerHTML = '<div class="loader">No hay noticias publicadas todavía.</div>';
+                    return;
+                }
+
                 feed.innerHTML = '';
                 
                 datos.forEach(item => {
-                    feed.innerHTML += `
-                        <div class="noticia">
-                            <div class="fecha">${item.fecha}</div>
-                            <p>${item.contenido}</p>
-                        </div>
+                    const card = document.createElement('div');
+                    card.className = 'noticia';
+                    card.innerHTML = `
+                        <div class="fecha">${item.fecha}</div>
+                        <p>${item.contenido}</p>
                     `;
+                    feed.appendChild(card);
                 });
             } catch (error) {
                 console.error("Error al cargar:", error);
+                document.getElementById('feed').innerHTML = '<div class="loader">⚠️ Error al cargar el feed.</div>';
             }
         }
+
+        // Carga inicial
         cargarNoticias();
+
+        // Recarga automática cada 45 segundos para ver noticias nuevas sin refrescar
+        setInterval(cargarNoticias, 45000);
     </script>
 </body>
 </html>
