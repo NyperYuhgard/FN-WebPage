@@ -15,7 +15,7 @@
             --header-dark: #151d27; 
             --accent-primary: #00d4ff;
             --accent-secondary: #ff007a;
-            --furry-orange: #faaf41; /* Naranja FA original */
+            --furry-orange: #faaf41; 
             --text: #e0defa;
             --text-dim: #8da1b9;
         }
@@ -59,54 +59,65 @@
 
         .widget-title { font-family: 'Fredoka One', cursive; font-size: 0.9rem; color: var(--furry-orange); margin-bottom: 15px; text-transform: uppercase; }
 
+        /* Estilos de Pestañas (Tabs) */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: var(--header-dark);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--text-dim);
+            padding: 12px;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .tab-btn:hover { border-color: var(--accent-primary); background: rgba(0, 212, 255, 0.1); }
+        .tab-btn.active {
+            background: var(--accent-primary);
+            color: #000;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
         /* Minijuego Clicker */
         .clicker-box { text-align: center; }
-        #paw-btn { 
-            font-size: 3rem; cursor: pointer; transition: transform 0.1s; display: inline-block; 
-            filter: drop-shadow(0 0 5px var(--accent-primary));
-        }
+        #paw-btn { font-size: 3rem; cursor: pointer; transition: transform 0.1s; display: inline-block; filter: drop-shadow(0 0 5px var(--accent-primary)); }
         #paw-btn:active { transform: scale(0.8); }
         #click-count { font-weight: bold; color: var(--accent-primary); font-size: 1.2rem; }
 
         .social-link {
             display: flex;
             align-items: center;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            background: rgba(255,255,255,0.05);
-            transition: 0.3s;
-            font-weight: 500;
+            padding: 10px; margin: 8px 0; border-radius: 8px;
+            text-decoration: none; color: white; background: rgba(255,255,255,0.05);
+            transition: 0.3s; font-weight: 500;
         }
         .social-link:hover { background: var(--accent-primary); color: #000; transform: translateX(5px); }
         .social-link.tg { border-left: 4px solid #26A5E4; }
         .social-link.fa { border-left: 4px solid #FAAF41; }
 
-        /* Feed de Noticias - Estilo FA */
+        /* Feed de Noticias */
         .news-card { 
-            background: var(--card-bg); 
-            border-radius: 4px; 
-            margin-bottom: 15px; 
+            background: var(--card-bg); border-radius: 4px; margin-bottom: 15px; 
             border: 1px solid var(--header-dark);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-            animation: slideIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            overflow: hidden;
+            animation: slideIn 0.4s ease-out; overflow: hidden;
         }
         .card-header { 
-            padding: 8px 15px; 
-            font-size: 0.7rem; 
-            background: var(--header-dark);
-            color: var(--furry-orange);
-            display: flex; 
-            justify-content: space-between; 
-            font-weight: bold;
-            text-transform: uppercase;
+            padding: 8px 15px; font-size: 0.7rem; background: var(--header-dark);
+            color: var(--furry-orange); display: flex; justify-content: space-between; 
+            font-weight: bold; text-transform: uppercase;
         }
         .card-body { padding: 15px; font-size: 1rem; line-height: 1.5; color: #fff; }
 
-        @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
@@ -120,7 +131,7 @@
 
 <nav>
     <div class="logo">🐾 FANAX HUB</div>
-    <div id="status-live" style="font-size: 0.8rem; color: #00ff88;">● CONECTADO A SUPABASE</div>
+    <div id="status-live" style="font-size: 0.8rem; color: #00ff88;">● TRANSMISIÓN ACTIVA</div>
 </nav>
 
 <div class="container">
@@ -130,7 +141,6 @@
             <a href="https://t.me/TuCanal" target="_blank" class="social-link tg">✈️ Telegram Channel</a>
             <a href="https://www.furaffinity.net/" target="_blank" class="social-link fa">🎨 FurAffinity</a>
         </div>
-        
         <div class="widget">
             <div class="widget-title">Mood del día</div>
             <div style="display: flex; justify-content: space-around; font-size: 1.5rem;">
@@ -142,12 +152,19 @@
     </div>
 
     <main>
-        <div class="widget" style="border-bottom: 2px solid var(--accent-primary); background: rgba(30, 26, 51, 0.9);">
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="cambiarFiltro('principal', this)">PRINCIPAL</button>
+            <button class="tab-btn" onclick="cambiarFiltro('staff', this)">STAFF</button>
+            <button class="tab-btn" onclick="cambiarFiltro('afiliados', this)">AFILIADOS</button>
+        </div>
+
+        <div class="widget" style="border-bottom: 2px solid var(--accent-primary); background: rgba(30, 26, 51, 0.9); padding: 15px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="widget-title" style="margin:0;">TRANSMISIONES EN TIEMPO REAL</span>
-                <span id="loading-spinner" style="font-size: 0.7rem; color: var(--accent-primary); display:none;">ACTUALIZANDO...</span>
+                <span id="feed-title" class="widget-title" style="margin:0;">NOTICIAS: PRINCIPAL</span>
+                <span id="loading-spinner" style="font-size: 0.7rem; color: var(--accent-primary); display:none;">CARGANDO...</span>
             </div>
         </div>
+
         <div id="feed">
             <p style="text-align:center; opacity:0.5;">Sintonizando frecuencias...</p>
         </div>
@@ -159,7 +176,6 @@
             <div id="paw-btn" onclick="givePaw()">🐾</div>
             <div id="click-count">0</div>
         </div>
-
         <div class="widget">
             <div class="widget-title">Dato Curioso</div>
             <div id="fact-display" style="font-size: 0.85rem; line-height: 1.4; font-style: italic; color: var(--text-dim);">
@@ -170,67 +186,96 @@
 </div>
 
 <script>
-    // --- LÓGICA DE SUPABASE ---
+    // --- CONFIGURACIÓN SUPABASE ---
     const SUPABASE_URL = 'https://inugvvfamtrwdrocbkse.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_BNIM9w3LeDzvRQf1j0nckA_xHqScDst'; // <--- REEMPLAZA ESTO
+    const SUPABASE_KEY = 'sb_publishable_BNIM9w3LeDzvRQf1j0nckA_xHqScDst'; 
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    let filtroActual = 'principal';
+
+    // Cambiar de pestaña
+    function cambiarFiltro(nuevaCat, boton) {
+        if (filtroActual === nuevaCat) return;
+        
+        filtroActual = nuevaCat;
+        document.getElementById('feed-title').innerText = `NOTICIAS: ${nuevaCat.toUpperCase()}`;
+        
+        // Actualizar botones
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        boton.classList.add('active');
+        
+        cargarNoticias();
+    }
+
     async function cargarNoticias() {
-        document.getElementById('loading-spinner').style.display = 'inline';
+        const loading = document.getElementById('loading-spinner');
+        loading.style.display = 'inline';
+        
         const { data, error } = await _supabase
             .from('noticias')
             .select('*')
+            .eq('categoria', filtroActual) // Filtro por categoría
             .order('created_at', { ascending: false })
-            .limit(10);
+            .limit(15);
 
-        document.getElementById('loading-spinner').style.display = 'none';
+        loading.style.display = 'none';
         
-        if (error) return console.error(error);
+        if (error) {
+            console.error(error);
+            return;
+        }
         
         const feed = document.getElementById('feed');
         feed.innerHTML = '';
-        if(data.length === 0) feed.innerHTML = '<p style="text-align:center; opacity:0.5;">No hay transmisiones aún.</p>';
-        data.forEach(n => mostrarNoticia(n));
+        
+        if(data.length === 0) {
+            feed.innerHTML = `<p style="text-align:center; opacity:0.4; margin-top:20px;">No hay reportes en la sección ${filtroActual.toUpperCase()} todavía.</p>`;
+        } else {
+            data.forEach(n => mostrarNoticia(n));
+        }
     }
 
     function mostrarNoticia(item, esNueva = false) {
         const feed = document.getElementById('feed');
-        if (feed.querySelector('p')) feed.innerHTML = ''; // Limpiar mensaje de espera
+        if (feed.querySelector('p')) feed.innerHTML = '';
 
         const card = document.createElement('div');
         card.className = 'news-card';
         
+        if(item.color_autor) {
+            card.style.borderLeft = `4px solid ${item.color_autor}`;
+        }
+    
         const fecha = new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
+    
         card.innerHTML = `
             <div class="card-header">
-                <span>🛰️ REPORTE DE TELEGRAM</span>
+                <span style="color: ${item.color_autor || 'var(--furry-orange)'}">
+                    📡 ${item.autor || 'SISTEMA'}
+                </span>
                 <span>${fecha}</span>
             </div>
             <div class="card-body">${item.contenido}</div>
         `;
-
-        if (esNueva) {
-            card.style.borderLeft = "4px solid var(--accent-primary)";
-            feed.prepend(card);
-        } else {
-            feed.appendChild(card);
-        }
+    
+        esNueva ? feed.prepend(card) : feed.appendChild(card);
     }
 
-    // Suscripción Realtime (Magia pura)
+    // Escuchar cambios en tiempo real
     _supabase.channel('noticias-realtime')
         .on('postgres_changes', 
             { event: 'INSERT', schema: 'public', table: 'noticias' }, 
             (payload) => {
-                mostrarNoticia(payload.new, true);
-                showFact(); // Cambiar dato curioso cuando llega noticia
+                // Solo mostrar si la noticia pertenece a la pestaña que el usuario está viendo
+                if (payload.new.categoria === filtroActual) {
+                    mostrarNoticia(payload.new, true);
+                    showFact();
+                }
             }
         )
         .subscribe();
 
-
-    // --- LÓGICA DE LA WEB ---
+    // --- LÓGICA DE LA WEB (Clicker y Datos) ---
     let count = 0;
     function givePaw() {
         count++;
@@ -250,7 +295,7 @@
         document.getElementById('fact-display').innerText = facts[Math.floor(Math.random() * facts.length)];
     }
 
-    // Inicio
+    // Inicializar
     showFact();
     cargarNoticias();
 </script>
