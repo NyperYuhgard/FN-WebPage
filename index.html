@@ -8,297 +8,304 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        /* --- MOTOR DE TEMAS COMPLETO VITAMINADO --- */
         :root {
-            --bg-main: #0f0c1d;
-            --bg-darker: #080612;
-            --card-bg: #2e3b4e; 
-            --header-dark: #151d27; 
-            --accent-primary: #00d4ff;
-            --accent-secondary: #ff007a;
-            --furry-orange: #faaf41; 
-            --text: #e0defa;
-            --text-dim: #8da1b9;
+            /* TEMA NÉBULA (Vitaminado con degradados y brillos) */
+            /* Fondo: Gradiente radial complejo y animado */
+            --bg-body: radial-gradient(circle at 10% 20%, rgba(27, 22, 51, 1) 0%, rgba(10, 8, 20, 1) 44%, rgba(15, 12, 30, 1) 100%);
+            /* Widgets: Cristal más definido con más blur */
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            /* Acento y Brillo: Más intenso */
+            --accent: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.7);
+            /* Sub pestañas: Gradiente en active */
+            --sub-active-bg: linear-gradient(135deg, #00d4ff 0%, #7000ff 100%);
+            
+            --text: #ffffff;
+            --text-dim: #b0b0d1;
+            --radius: 20px;
+            --nav-bg: rgba(8, 6, 18, 0.9);
+            --card-head: rgba(0,0,0,0.3);
+        }
+
+        [data-theme="retro"] {
+            --bg-body: #008080;
+            --glass: #c0c0c0;
+            --glass-border: #fff;
+            --accent: #000080;
+            --accent-glow: none;
+            --sub-active-bg: #000080;
+            --text: #000;
+            --text-dim: #444;
+            --radius: 0px;
+            --nav-bg: #c0c0c0;
+            --card-head: #808080;
+        }
+
+        [data-theme="aero"] {
+            --bg-body: linear-gradient(180deg, #0051a8 0%, #28c0ff 100%);
+            --glass: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --accent: #0055ff;
+            --accent-glow: rgba(255,255,255,0.8);
+            --sub-active-bg: rgba(0, 80, 190, 0.8);
+            --text: #002244;
+            --text-dim: #004488;
+            --radius: 15px;
+            --nav-bg: rgba(255, 255, 255, 0.4);
+            --card-head: rgba(255,255,255,0.3);
         }
 
         body { 
-            font-family: 'Lexend', sans-serif; 
-            background-color: var(--bg-main); 
-            color: var(--text);
-            margin: 0; overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1b1633 0%, #0f0c1d 100%);
+            font-family: 'Lexend', sans-serif; background: var(--bg-body); 
+            color: var(--text); margin: 0; min-height: 100vh; transition: background 0.5s;
+            /* Fondo animado para Nébula */
+            background-size: 200% 200%;
+            animation: gradientBG 20s ease infinite;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- NAVEGACIÓN LLAMATIVA --- */
         nav {
-            background: var(--bg-darker);
-            padding: 10px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--accent-primary);
-            position: sticky; top: 0; z-index: 100;
+            background: var(--nav-bg); backdrop-filter: blur(20px);
+            height: 70px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; border-bottom: 2px solid var(--accent); position: sticky; top:0; z-index:100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
-        .logo { font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--accent-primary); }
+        .logo { font-family: 'Fredoka One'; font-size: 1.5rem; color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
+
+        .main-nav-links { display: flex; gap: 10px; height: 100%; }
+        .nav-item {
+            display: flex; align-items: center; padding: 0 15px;
+            text-decoration: none; font-family: 'Fredoka One'; font-size: 0.8rem;
+            color: var(--text); opacity: 0.6; transition: 0.3s; cursor: pointer;
+        }
+        .nav-item.active { opacity: 1; border-bottom: 4px solid var(--accent); background: rgba(255,255,255,0.05); text-shadow: 0 0 5px var(--accent-glow); }
 
         .container { 
-            max-width: 1100px; 
-            margin: 30px auto; 
-            padding: 0 20px; 
-            display: grid; 
-            grid-template-columns: 250px 1fr 280px; 
-            gap: 20px; 
+            max-width: 1200px; margin: 30px auto; padding: 0 20px; 
+            display: grid; grid-template-columns: 260px 1fr 280px; gap: 25px; 
         }
 
+        /* --- WIDGETS Y CRISTAL BRILANTE --- */
         .widget {
-            background: rgba(30, 26, 51, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 20px;
+            background: var(--glass); backdrop-filter: blur(15px);
+            padding: 20px; border-radius: var(--radius);
+            border: 1px solid var(--glass-border); margin-bottom: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s;
         }
+        .widget:hover { border-color: var(--accent-glow); }
+        .widget-title { font-family: 'Fredoka One'; font-size: 0.8rem; color: #faaf41; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 5px rgba(250, 175, 65, 0.5); }
 
-        .widget-title { font-family: 'Fredoka One', cursive; font-size: 0.9rem; color: var(--furry-orange); margin-bottom: 15px; text-transform: uppercase; }
-
-        /* Estilos de Pestañas (Tabs) */
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .tab-btn {
-            flex: 1;
-            background: var(--header-dark);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            color: var(--text-dim);
-            padding: 12px;
-            cursor: pointer;
-            font-family: 'Fredoka One', cursive;
-            font-size: 0.75rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-        .tab-btn:hover { border-color: var(--accent-primary); background: rgba(0, 212, 255, 0.1); }
-        .tab-btn.active {
-            background: var(--accent-primary);
-            color: #000;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-        }
-
-        /* Minijuego Clicker */
-        .clicker-box { text-align: center; }
-        #paw-btn { font-size: 3rem; cursor: pointer; transition: transform 0.1s; display: inline-block; filter: drop-shadow(0 0 5px var(--accent-primary)); }
-        #paw-btn:active { transform: scale(0.8); }
-        #click-count { font-weight: bold; color: var(--accent-primary); font-size: 1.2rem; }
-
+        /* --- ENLACES CON GRADIENTE --- */
         .social-link {
-            display: flex;
-            align-items: center;
-            padding: 10px; margin: 8px 0; border-radius: 8px;
-            text-decoration: none; color: white; background: rgba(255,255,255,0.05);
-            transition: 0.3s; font-weight: 500;
+            display: flex; align-items: center; padding: 10px; margin: 8px 0; border-radius: 10px;
+            text-decoration: none; color: inherit; background: rgba(255,255,255,0.05);
+            transition: 0.3s; font-size: 0.9rem; border: 1px solid transparent;
         }
-        .social-link:hover { background: var(--accent-primary); color: #000; transform: translateX(5px); }
-        .social-link.tg { border-left: 4px solid #26A5E4; }
-        .social-link.fa { border-left: 4px solid #FAAF41; }
+        .social-link:hover { transform: translateX(5px); border-color: var(--glass-border); background: rgba(255,255,255,0.08); }
+        .tg { border-left: 4px solid #26A5E4; }
+        .tg:hover { background: linear-gradient(to right, rgba(38, 165, 228, 0.1), transparent); }
+        .fa { border-left: 4px solid #FAAF41; }
+        .fa:hover { background: linear-gradient(to right, rgba(250, 175, 65, 0.1), transparent); }
 
-        /* Feed de Noticias */
+        /* --- SUB PESTAÑAS GRADIENTE --- */
+        .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 30px; }
+        .sub-btn { 
+            background: transparent; border: none; color: inherit;
+            padding: 10px 20px; border-radius: 25px; cursor: pointer; font-size: 0.7rem; font-weight: bold; transition: 0.3s;
+        }
+        .sub-btn.active { background: var(--sub-active-bg); color: #fff; box-shadow: 0 4px 15px var(--accent-glow); }
+
+        /* --- NOTICIAS Y ANIMACIÓN --- */
         .news-card { 
-            background: var(--card-bg); border-radius: 4px; margin-bottom: 15px; 
-            border: 1px solid var(--header-dark);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-            animation: slideIn 0.4s ease-out; overflow: hidden;
+            background: rgba(255,255,255,0.02); border-radius: var(--radius); 
+            margin-bottom: 15px; border: 1px solid var(--glass-border); overflow: hidden;
+            animation: slideIn 0.4s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        .card-header { 
-            padding: 8px 15px; font-size: 0.7rem; background: var(--header-dark);
-            color: var(--furry-orange); display: flex; justify-content: space-between; 
-            font-weight: bold; text-transform: uppercase;
-        }
-        .card-body { padding: 15px; font-size: 1rem; line-height: 1.5; color: #fff; }
+        .card-header { padding: 12px 18px; font-size: 0.75rem; background: var(--card-head); display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); }
+        .card-body { padding: 18px; line-height: 1.6; font-size: 1.05rem; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- MASCOTAS GRIDS --- */
+        .pet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .pet-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid transparent; transition: 0.3s; }
+        .pet-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); transform: translateY(-3px); }
 
-        @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; }
-            .sidebar-left { order: 2; }
-            main { order: 1; }
-            .sidebar-right { order: 3; }
+        /* --- CLICKER VITAMINADO Y BRILLANTE --- */
+        .clicker-box { text-align: center; position: relative; }
+        #paw-btn { 
+            font-size: 4rem; cursor: pointer; transition: 0.1s; user-select: none; display: inline-block;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+            z-index: 2; position: relative;
         }
+        #paw-btn:active { transform: scale(0.9) rotate(5deg); }
+        
+        /* Onda de choque al hacer clic */
+        .onda-choque {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 10px; height: 10px; background: rgba(0, 212, 255, 0.5);
+            border-radius: 50%; pointer-events: none; opacity: 0; z-index: 1;
+        }
+        .animate-onda { animation: ondaAnim 0.5s ease-out; }
+
+        @keyframes ondaAnim {
+            0% { width: 10px; height: 10px; opacity: 1; box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent); }
+            100% { width: 150px; height: 150px; opacity: 0; box-shadow: 0 0 30px rgba(0, 212, 255, 0), 0 0 50px rgba(0, 212, 255, 0); }
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .sidebar-left, .sidebar-right { display: none; } }
     </style>
 </head>
-<body>
+<body data-theme="nebula">
 
 <nav>
-    <div class="logo">🐾 Furry North +</div>
-    <div id="status-live" style="font-size: 0.8rem; color: #00ff88;">● TRANSMISIÓN ACTIVA</div>
+    <div class="logo">🐾 FURRY NORTH +</div>
+    <div class="main-nav-links">
+        <div class="nav-item active" onclick="showSec('noticias', this)">Noticias</div>
+        <div class="nav-item" onclick="showSec('galeria', this)">Galería</div>
+        <div class="nav-item" onclick="showSec('mascotas', this)">Mascotas</div>
+        <div class="nav-item" onclick="showSec('info', this)">Conócenos</div>
+    </div>
 </nav>
 
 <div class="container">
-    <div class="sidebar-left">
+    <aside class="sidebar-left">
         <div class="widget">
-            <div class="widget-title">Enlaces Rápidos</div>
-            <a href="https://t.me/FurryNorth" target="_blank" class="social-link tg">✈️ Telegram Channel</a>
-            <a href="https://www.furaffinity.net/" target="_blank" class="social-link fa">🎨 FurAffinity</a>
-        </div>
-        <div class="widget">
-            <div class="widget-title">Mood del día</div>
-            <div style="display: flex; justify-content: space-around; font-size: 1.5rem;">
-                <span style="cursor:pointer" onclick="alert('¡Rawr! 🦊')">😊</span>
-                <span style="cursor:pointer" onclick="alert('¡A rugir! 🦁')">🔥</span>
-                <span style="cursor:pointer" onclick="alert('¡Zzz...! 💤')">😴</span>
+            <div class="widget-title">🖥️ TEMAS FN</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="setT('nebula')" style="cursor:pointer; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background: linear-gradient(135deg, #1b1633, #0a0814); color:white; font-weight:bold; font-size:0.7rem;">🌌 NÉBULA PRO</button>
+                <button onclick="setT('retro')" style="cursor:pointer; padding:8px; border-radius:8px; border:none; background: #c0c0c0; color:black; font-family:Tahoma; font-size:0.7rem;">💾 WIN RETRO</button>
+                <button onclick="setT('aero')" style="cursor:pointer; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.3); background: rgba(40, 192, 255, 0.5); backdrop-filter:blur(5px); color:white; font-size:0.7rem;">💧 AERO GLASS</button>
             </div>
         </div>
-    </div>
+
+        <div class="widget">
+            <div class="widget-title">📌 ENLACES</div>
+            <a href="#" class="social-link tg">✈️ Telegram Channel</a>
+            <a href="#" class="social-link fa">🎨 FurAffinity</a>
+        </div>
+    </aside>
 
     <main>
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="cambiarFiltro('principal', this)">PRINCIPAL</button>
-            <button class="tab-btn" onclick="cambiarFiltro('staff', this)">STAFF</button>
-            <button class="tab-btn" onclick="cambiarFiltro('afiliados', this)">AFILIADOS</button>
-        </div>
-
-        <div class="widget" style="border-bottom: 2px solid var(--accent-primary); background: rgba(30, 26, 51, 0.9); padding: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span id="feed-title" class="widget-title" style="margin:0;">NOTICIAS: PRINCIPAL</span>
-                <span id="loading-spinner" style="font-size: 0.7rem; color: var(--accent-primary); display:none;">CARGANDO...</span>
+        <section id="sec-noticias" class="section active">
+            <div class="sub-tabs">
+                <button class="sub-btn active" onclick="cambiarFiltro('principal', this)">PRINCIPAL</button>
+                <button class="sub-btn" onclick="cambiarFiltro('staff', this)">STAFF</button>
+                <button class="sub-btn" onclick="cambiarFiltro('afiliados', this)">AFILIADOS</button>
             </div>
-        </div>
+            <div id="feed"></div>
+        </section>
 
-        <div id="feed">
-            <p style="text-align:center; opacity:0.5;">Sintonizando frecuencias...</p>
-        </div>
+        <section id="sec-mascotas" class="section">
+            <div class="widget">
+                <div class="widget-title">🐾 NUESTRAS MASCOTAS</div>
+                <div class="pet-grid">
+                    <div class="pet-card">🦊 <strong>Northy</strong><br><small style="color:var(--text-dim)">Zorro Ártico</small></div>
+                    <div class="pet-card">🐺 <strong>Snow</strong><br><small style="color:var(--text-dim)">Lobo Gris</small></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-galeria" class="section">
+            <div class="widget">🎨 Galería en desarrollo por el Staff.</div>
+        </section>
+
+        <section id="sec-info" class="section">
+            <div class="widget">
+                <div class="widget-title">🦊 SOBRE NOSOTROS</div>
+                <p>Somos una comunidad dedicada a conectar el fandom furry del Norte.</p>
+            </div>
+        </section>
     </main>
 
-    <div class="sidebar-right">
+    <aside class="sidebar-right">
         <div class="widget clicker-box">
-            <div class="widget-title">Clicker de Huellas</div>
-            <div id="paw-btn" onclick="givePaw()">🐾</div>
-            <div id="click-count">0</div>
-        </div>
-        <div class="widget">
-            <div class="widget-title">Dato Curioso</div>
-            <div id="fact-display" style="font-size: 0.85rem; line-height: 1.4; font-style: italic; color: var(--text-dim);">
-                Olfateando datos...
+            <div class="widget-title">HUELLAS</div>
+            <div style="position:relative; display:inline-block;">
+                <div id="paw-btn" onclick="givePaw()">🐾</div>
+                <div id="onda" class="onda-choque"></div>
             </div>
+            <div id="click-count" style="font-size: 2.2rem; font-family:'Fredoka One'; margin-top:10px; color:var(--text);">0</div>
         </div>
-    </div>
+
+        <div class="widget">
+            <div class="widget-title">💡 DATO CURIOSO</div>
+            <div id="fact-display" style="font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">Cargando dato...</div>
+        </div>
+    </aside>
 </div>
 
 <script>
-    // --- CONFIGURACIÓN SUPABASE ---
     const SUPABASE_URL = 'https://inugvvfamtrwdrocbkse.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_BNIM9w3LeDzvRQf1j0nckA_xHqScDst'; 
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let filtroActual = 'principal';
 
-    // Cambiar de pestaña
-    function cambiarFiltro(nuevaCat, boton) {
-        if (filtroActual === nuevaCat) return;
-        
-        filtroActual = nuevaCat;
-        document.getElementById('feed-title').innerText = `NOTICIAS: ${nuevaCat.toUpperCase()}`;
-        
-        // Actualizar botones
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        boton.classList.add('active');
-        
+    function showSec(id, el) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('sec-'+id).classList.add('active');
+        if(id === 'noticias') cargarNoticias();
+    }
+
+    function setT(t) { document.body.setAttribute('data-theme', t); }
+
+    function cambiarFiltro(cat, btn) {
+        filtroActual = cat;
+        document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         cargarNoticias();
     }
 
     async function cargarNoticias() {
-        const loading = document.getElementById('loading-spinner');
-        loading.style.display = 'inline';
-        
-        const { data, error } = await _supabase
-            .from('noticias')
-            .select('*')
-            .eq('categoria', filtroActual) // Filtro por categoría
-            .order('created_at', { ascending: false })
-            .limit(15);
-
-        loading.style.display = 'none';
-        
-        if (error) {
-            console.error(error);
-            return;
-        }
-        
+        const { data } = await _supabase.from('noticias').select('*').eq('categoria', filtroActual).order('created_at', { ascending: false }).limit(10);
         const feed = document.getElementById('feed');
-        feed.innerHTML = '';
-        
-        if(data.length === 0) {
-            feed.innerHTML = `<p style="text-align:center; opacity:0.4; margin-top:20px;">No hay reportes en la sección ${filtroActual.toUpperCase()} todavía.</p>`;
-        } else {
-            data.forEach(n => mostrarNoticia(n));
-        }
+        feed.innerHTML = data && data.length ? '' : '<p style="text-align:center; opacity:0.3; padding: 20px;">Sin noticias en esta frecuencia.</p>';
+        if(data) data.forEach(n => {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `<div class="card-header"><span style="color:var(--accent)">📡 ${n.autor}</span><span style="opacity:0.5;">${new Date(n.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span></div><div class="card-body">${n.contenido}</div>`;
+            feed.appendChild(card);
+        });
     }
 
-    function mostrarNoticia(item, esNueva = false) {
-        const feed = document.getElementById('feed');
-        if (feed.querySelector('p')) feed.innerHTML = '';
-
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        
-        if(item.color_autor) {
-            card.style.borderLeft = `4px solid ${item.color_autor}`;
-        }
-    
-        const fecha = new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    
-        card.innerHTML = `
-            <div class="card-header">
-                <span style="color: ${item.color_autor || 'var(--furry-orange)'}">
-                    📡 ${item.autor || 'SISTEMA'}
-                </span>
-                <span>${fecha}</span>
-            </div>
-            <div class="card-body">${item.contenido}</div>
-        `;
-    
-        esNueva ? feed.prepend(card) : feed.appendChild(card);
-    }
-
-    // Escuchar cambios en tiempo real
-    _supabase.channel('noticias-realtime')
-        .on('postgres_changes', 
-            { event: 'INSERT', schema: 'public', table: 'noticias' }, 
-            (payload) => {
-                // Solo mostrar si la noticia pertenece a la pestaña que el usuario está viendo
-                if (payload.new.categoria === filtroActual) {
-                    mostrarNoticia(payload.new, true);
-                    showFact();
-                }
-            }
-        )
-        .subscribe();
-
-    // --- LÓGICA DE LA WEB (Clicker y Datos) ---
     let count = 0;
     function givePaw() {
-        count++;
+        count++; 
         document.getElementById('click-count').innerText = count;
-        const colors = ['#00d4ff', '#ff007a', '#ffa500'];
-        document.getElementById('paw-btn').style.filter = `drop-shadow(0 0 15px ${colors[count % 3]})`;
+        
+        // Efecto visual: Onda de choque
+        const onda = document.getElementById('onda');
+        onda.classList.remove('animate-onda');
+        void onda.offsetWidth; // Trigger reflow para reiniciar animación
+        onda.classList.add('animate-onda');
+
+        // Brillo extra al contador cada 10 clics
+        if(count % 10 === 0) {
+            document.getElementById('click-count').style.color = 'var(--accent)';
+            setTimeout(() => document.getElementById('click-count').style.color = 'var(--text)', 200);
+        }
     }
 
-    const facts = [
-        "Los linces pueden ver un ratón a 75 metros de distancia.",
-        "El fandom furry celebró su primera convención en 1989.",
-        "Los zorros usan el campo magnético de la Tierra para cazar.",
-        "Los pandas rojos usan su cola para equilibrarse."
-    ];
+    const facts = ["Los zorros oyen a 40m.", "El fandom nació en los 80.", "Los lobos aúllan para reunirse.", "Las huellas son únicas."];
+    function showFact() { document.getElementById('fact-display').innerText = facts[Math.floor(Math.random()*facts.length)]; }
 
-    function showFact() {
-        document.getElementById('fact-display').innerText = facts[Math.floor(Math.random() * facts.length)];
-    }
-
-    // Inicializar
     showFact();
     cargarNoticias();
 </script>
-
 </body>
 </html>
